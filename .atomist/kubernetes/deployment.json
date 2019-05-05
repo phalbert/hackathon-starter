@@ -1,0 +1,84 @@
+{
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "securityContext": {
+              "allowPrivilegeEscalation": false,
+              "privileged": false,
+              "readOnlyRootFilesystem": true
+            },
+            "volumeMounts": [
+              {
+                "mountPath": "/starter/uploads",
+                "name": "uploads"
+              }
+            ]
+          },
+          {
+            "name": "mongo",
+            "image": "mongo:latest",
+            "imagePullPolicy": "IfNotPresent",
+            "ports": [
+              {
+                "name": "http",
+                "containerPort": 27017,
+                "protocol": "TCP"
+              }
+            ],
+            "resources": {
+              "limits": {
+                "cpu": "100m",
+                "memory": "512Mi"
+              },
+              "requests": {
+                "cpu": "100m",
+                "memory": "256Mi"
+              }
+            },
+            "securityContext": {
+              "allowPrivilegeEscalation": false,
+              "privileged": false,
+              "readOnlyRootFilesystem": true,
+              "runAsGroup": 999,
+              "runAsUser": 999
+            },
+            "volumeMounts": [
+              {
+                "mountPath": "/data/db",
+                "name": "mongo-data"
+              },
+              {
+                "mountPath": "/tmp",
+                "name": "mongo-tmp"
+              }
+            ]
+          }
+        ],
+        "securityContext": {
+          "fsGroup": 1001,
+          "runAsGroup": 1001,
+          "runAsNonRoot": true,
+          "runAsUser": 1001,
+          "supplementalGroups": [],
+          "sysctls": []
+        },
+        "volumes": [
+          {
+            "emptyDir": {},
+            "name": "uploads"
+          },
+          {
+            "emptyDir": {},
+            "name": "mongo-data"
+          },
+          {
+            "emptyDir": {},
+            "name": "mongo-tmp"
+          }
+        ]
+      }
+    }
+  }
+}
